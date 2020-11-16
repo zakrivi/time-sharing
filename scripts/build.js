@@ -1,8 +1,15 @@
 const fs = require('fs')
 const rollup = require('rollup')
 const builds = require('./config').getAllBuilds()
+const genConfig = require('./config').genConfig
+const chalk = require('chalk');
+const path = require('path')
 
-buildAll()
+if (process.argv.includes('-w')) {
+    watchAll()
+} else {
+    buildAll()
+}
 
 function buildAll() {
     if (!fs.existsSync('dist')) {
@@ -33,4 +40,31 @@ function buildAll() {
             })
             .catch(error => console.log(error))
     }
+}
+
+function watchAll() {
+    if (!fs.existsSync('dist')) {
+        fs.mkdirSync('dist')
+    }
+
+    const watchOption = {
+        input: builds[0].input,
+        watch: {
+            include: path.resolve(__dirname, '../', 'src/**')
+        },
+        output: {
+            ...genConfig('iife').output,
+            sourcemap: true
+        }
+    }
+
+    const watcher = rollup.watch(watchOption)
+
+    watcher.on('event', event => {
+        if (['ERROR', 'FATAL'].includes(event.code)) {
+            console.log(chalk.red(event.code))
+        } else {
+            console.log(chalk.green(event.code))
+        }
+    });
 }

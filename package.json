@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rollup --config rollup.config.dev.js -w",
+    "build:watch": "node scripts/build.js -w",
     "build": "node scripts/build.js"
   },
   "keywords": [],
@@ -14,6 +14,7 @@
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "@rollup/plugin-babel": "^5.2.1",
+    "chalk": "^4.1.0",
     "rollup": "^2.32.1",
     "rollup-plugin-terser": "^7.0.2"
   },
