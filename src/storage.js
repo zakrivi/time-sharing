@@ -1,5 +1,5 @@
 'use strict'
-import { dpr } from './utils'
+import { dpr, getHighPrice, getLowPrice } from './utils'
 // 配置类
 class Storage {
     constructor() {
@@ -21,6 +21,10 @@ class Storage {
         Object.keys(options).forEach(key => {
             this._config[key] = options[key]
         })
+
+        const { highPrice, lowPrice, rawData } = this._config
+        this._config.computedHighPrice = highPrice || getHighPrice({ rawData })
+        this._config.computedLowPrice = lowPrice || getLowPrice({ rawData })
     }
 
     getConfig() {
@@ -30,12 +34,14 @@ class Storage {
 
 function getDefaultConfig () {
     return {
-        zoomX: 1 / dpr,
+        zoomX: dpr,
         rawData: [],
         kList: [],
         highPrice: null,
         lowPrice: null,
         closePrice: null,
+        computedHighPrice: null,
+        computedLowPrice: null,
         digit: 2,
         startTime: '',
         endTime: '',
@@ -49,8 +55,8 @@ function getDefaultConfig () {
             normal: `${12 * dpr}px sans-serif`
         },
         colors: {
-            up: '',
-            down: ''
+            up: 'red',
+            down: 'green'
         },
         nodes: {}
     }

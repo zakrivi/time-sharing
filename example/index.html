@@ -14,27 +14,27 @@
     <script src="../dist/time-sharing.min.js"></script>
     <script src="./data.js"></script>
     <script>
+        var lastData = {
+            highPrice: 1.95597,
+            lowPrice: 1.94717,
+            closePrice: 1.95070
+        }
         var myChart = new timeSharing.InitChart({
             el: '#my-chart',
         })
 
         myChart.applyConfig({
-            colors: {
-                up: 'red',
-                down: 'green'
-            },
-            digit: 3,
-            schedule_day,
-            rawData: data,
-            startTime: schedule_day[0].schedule_time[0].start_time * 1000,
-            endTime: schedule_day[0].schedule_time[0].end_time * 1000,
-            openPrice: lastData.openPrice,
-            highPrice: lastData.highPrice,
-            lowPrice: lastData.lowPrice,
-            closePrice: lastData.closePrice,
-            tradingLength: getTradingLen(schedule_day)
+            rawData: rawData, // 原始数据
+            startTime: 1604008800, // 开始时间
+            endTime: 1604091600, // 结束时间
+            highPrice: lastData.highPrice, //最高价
+            lowPrice: lastData.lowPrice, // 最低价
+            closePrice: lastData.closePrice, // 昨日收盘价
+            tradingLength: 60 * 24, // 交易时段的最大数据量
+            debug: true
         });
 
+        // 监听事件
         // PC
         ['mousemove', 'mousedown', 'mouseup', 'mouseleave'].forEach(function (key) {
             myChart.subscribe(key, function () {
@@ -48,17 +48,6 @@
         //         console.log(key)
         //     })
         // })
-        
-
-        function getTradingLen(schedule_day) {
-            if (!schedule_day) {
-                return
-            }
-            const len = schedule_day[0].schedule_time.reduce((total, item) => {
-                return Math.ceil(total + (item.end_time - item.start_time) / 60)
-            }, 0)
-            return len !== 0 ? len : undefined
-        }
     </script>
 </body>
 

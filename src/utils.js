@@ -21,33 +21,31 @@ export const enumEvents = (() => {
 })()
 
 // 获取最高价
-// export function getHighPrice (kList) {
-//     // return Math.max(...kList.map(item => item.close))
-//     return highPrice
-// }
-// // 获取最低价
-// export function getLowPrice (kList) {
-//     // return Math.min(...kList.map(item => item.close))
-//     return lowPrice
-// }
+export function getHighPrice ({ rawData }) {
+    return Math.max(...rawData.map(item => item.price))
+}
+// 获取最低价
+export function getLowPrice ({ rawData }) {
+    return Math.min(...rawData.map(item => item.price))
+}
 
 // 获取最高值
-export function getHighestValue ({ closePrice, highPrice, lowPrice }) {
+export function getHighestValue ({ closePrice, computedHighPrice, computedLowPrice }) {
     // (取 |最高价-开盘价|、|最低价-开盘价| 对应绝对值中的最高值)
-    const highestValue = Math.max(Math.abs(highPrice - closePrice), Math.abs(lowPrice - closePrice))
+    const highestValue = Math.max(Math.abs(computedHighPrice - closePrice), Math.abs(computedLowPrice - closePrice))
 
     return highestValue * 1.15
 }
 
 // 获取图表高度差值
-export function getChartHeightDiff ({ closePrice, highPrice, lowPrice }) {
-    const { upperPoint, bottomPoint } = getCriticalValue({ closePrice, highPrice, lowPrice })
+export function getChartHeightDiff ({ closePrice, computedHighPrice, computedLowPrice }) {
+    const { upperPoint, bottomPoint } = getCriticalValue({ closePrice, computedHighPrice, computedLowPrice })
     return upperPoint - bottomPoint
 }
 
 // 获取上下坐标点
-export function getCriticalValue ({ closePrice, highPrice, lowPrice }) {
-    const highestValue = getHighestValue({ closePrice, highPrice, lowPrice })
+export function getCriticalValue ({ closePrice, computedHighPrice, computedLowPrice }) {
+    const highestValue = getHighestValue({ closePrice, computedHighPrice, computedLowPrice })
     // 上轴坐标点
     const upperPoint = closePrice + highestValue
     // 下轴坐标点
@@ -61,51 +59,71 @@ export function getCriticalValue ({ closePrice, highPrice, lowPrice }) {
 
 // 格式化数据
 export function formatData (options) {
-    const { rawData, zoomX, closePrice, highPrice, lowPrice, size, tradingLength } = options
+    const { rawData, zoomX, closePrice, computedHighPrice, computedLowPrice, size, tradingLength, debug } = options
+    const scale = tradingLength <= size.containerWidth ? 1 : tradingLength / (size.containerWidth + 1)
+    let result = []
 
-    const radio = (Math.floor(tradingLength / size.areaCtxWidth * 100) / 100).toFixed(2) * 1
-
+    if (!rawData.length) {
+        return []
+    }
     const shownKlist = []
-    const unShownKlist = []
-    const result = rawData
-        .filter((item, i) => {
+    let index = 0
+    let hasLast = false
+    const interval = Math.floor(scale)
+    const remainder = scale % interval
+    let sum = 0
+    while (index < rawData.length) {
+        shownKlist.push(rawData[index])
+        if (index === rawData.length - 1) {
+            hasLast = true
+        }
+
+        index = index + interval
+        sum += remainder
+
+        if (sum >= 1) {
+            index += Math.floor(sum)
+            sum = sum - Math.floor(sum)
+        }
+    }
+
+    if (!hasLast) {
+        shownKlist.push(rawData[rawData.length - 1])
+    }
+
+    result = shownKlist.map((item, i) => {
+        return {
+            ...item,
+            x: priceToXAxis(i, zoomX),
+            y: priceToYAxis(item.price, { closePrice, computedHighPrice, computedLowPrice, size })
+        }
+    })
+
+    if (debug && result.length) {
+        const times = result.map(item => {
             const date = new Date(item.time * 1000)
             const M = date.getMonth() + 1
             const D = date.getDate()
             const h = date.getHours()
             const m = date.getMinutes()
             const timeStr = `${M}/${D} ${h}:${m}`
-            if (Math.floor(i % radio) === 0) {
-                shownKlist.push([timeStr, item.time])
-                return true
-            } else {
-                unShownKlist.push([timeStr, item.time])
-            }
+            return [timeStr, item.time, item.price]
         })
-        .map((item, i) => {
-            return {
-                ...item,
-                x: priceToXAxis(i, zoomX),
-                y: priceToYAxis(item.close, { closePrice, highPrice, lowPrice, size })
-            }
-        })
-
-    // if (rawData.length) {
-    //     console.log({ shownKlist, unShownKlist })
-    // }
+        console.log({ times })
+    }
     return result
 }
 
 // 价格转换y轴坐标
-export function priceToYAxis (price, { closePrice, highPrice, lowPrice, size }) {
-    var heightDiff = getChartHeightDiff({ closePrice, highPrice, lowPrice })
+export function priceToYAxis (price, { closePrice, computedHighPrice, computedLowPrice, size }) {
+    var heightDiff = getChartHeightDiff({ closePrice, computedHighPrice, computedLowPrice })
     const result = Math.round((1 - (price - closePrice + heightDiff / 2) / heightDiff) * size.areaCtxHeight)
     return result
 }
 
 // 任意y坐标计算对应的价格
-export function yAxisToPrice (y, { closePrice, highPrice, lowPrice, size }) {
-    var heightDiff = getChartHeightDiff({ closePrice, highPrice, lowPrice })
+export function yAxisToPrice (y, { closePrice, computedHighPrice, computedLowPrice, size }) {
+    var heightDiff = getChartHeightDiff({ closePrice, computedHighPrice, computedLowPrice })
 
     return (1 - y / size.areaCtxHeight) * heightDiff - heightDiff / 2 + closePrice
 }

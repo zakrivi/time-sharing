@@ -7,11 +7,6 @@ export class InitChart {
     constructor (args) {
         // 更新配置
         storage.update({
-            ...args.config,
-            highPrice: args.highPrice,
-            lowPrice: args.lowPrice,
-            closePrice: args.closePrice,
-            digit: args.digit,
             nodes: {
                 container: document.createElement('div'),
                 area: document.createElement('canvas'),
@@ -41,7 +36,7 @@ export class InitChart {
         // 绑定事件(面积图交互层#area-cross)
         this._bindEventForAreaCross()
 
-        window.addEventListener('resize', this.updateChart.bind(this))
+        // window.addEventListener('resize', this.updateChart.bind(this))
     }
 
     // 渲染DOM节点
@@ -59,7 +54,7 @@ export class InitChart {
 
         const xAxisParentElm = document.createElement('div')
         xAxisParentElm.id = 'xAxisParentElm'
-        xAxisParentElm.style.cssText = 'width: 100%;user-select: none;position: relative;flex:0 0 28px;height: 28px;border-top: 1px solid #505361;box-sizing: border-box;'
+        xAxisParentElm.style.cssText = 'width: 100%;user-select: none;position: relative;flex:0 0 28px;height: 28px;border-top: 1px solid #505361;box-sizing: border-box;overflow: hidden;'
         xAxisParentElm.appendChild(nodes.xAxis)
 
         nodes.container.appendChild(areaParentElm)

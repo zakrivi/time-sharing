@@ -85,8 +85,8 @@ export class InitArea {
     // 上下坐标点、涨跌幅
     _drawPoint () {
         const { ctx } = this
-        const { closePrice, size, digit, colors, highPrice, lowPrice } = storage.getConfig()
-        const { upperPoint, bottomPoint } = getCriticalValue({ closePrice, highPrice, lowPrice })
+        const { closePrice, size, digit, colors, computedHighPrice, computedLowPrice } = storage.getConfig()
+        const { upperPoint, bottomPoint } = getCriticalValue({ closePrice, computedHighPrice, computedLowPrice })
         const upperChange = (upperPoint - closePrice) / closePrice * 100
         const bottomChange = (bottomPoint - closePrice) / closePrice * 100
 
@@ -132,7 +132,7 @@ export class InitCorss {
     // 绘画十字线
     _drawCrossLine (e) {
         const { ctx } = this
-        const { digit, closePrice, size, font, highPrice, lowPrice } = storage.getConfig()
+        const { digit, closePrice, size, font, computedHighPrice, computedLowPrice } = storage.getConfig()
         const coordinate = getCoordinate(e || this._crossE, size)
         const x = Math.round(coordinate.x)
         const y = Math.round(coordinate.y)
@@ -151,7 +151,7 @@ export class InitCorss {
         ctx.stroke()
         ctx.restore()
 
-        const price = priceDigit(yAxisToPrice(y, { closePrice, highPrice, lowPrice, size }), digit)
+        const price = priceDigit(yAxisToPrice(y, { closePrice, computedHighPrice, computedLowPrice, size }), digit)
         const priceChange = priceDigit((price - closePrice) / closePrice * 100, 2) + '%'
         ctx.save()
         ctx.beginPath()
@@ -180,7 +180,7 @@ export class InitCorss {
             return
         }
 
-        const { close: price } = target
+        const { price } = target
         const y = target.y
 
         ctx.save()

@@ -61,10 +61,21 @@ function watchAll() {
     const watcher = rollup.watch(watchOption)
 
     watcher.on('event', event => {
-        if (['ERROR', 'FATAL'].includes(event.code)) {
+        const { code } = event
+        switch (code) {
+        case 'ERROR': {
+            const { error } = event
             console.log(chalk.red(event.code))
-        } else {
+            console.log(error, '\n')
+            break;
+        }
+        case 'FATAL': {
+            console.log(chalk.red(event.code))
+            break;
+        }
+        default: {
             console.log(chalk.green(event.code))
+        }
         }
     });
 }
