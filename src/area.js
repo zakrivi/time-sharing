@@ -120,7 +120,7 @@ export class InitCorss {
 
         this._crossE = null
         this.isShowCross = false
-        this._drawRound()
+        // this._drawRound()
     }
 
     draw (e) {
@@ -222,7 +222,7 @@ export class InitCorss {
             if (leng) {
                 const { x, y, time: lastTime } = storage.getConfig().kList[leng - 1]
                 const { endTime } = storage.getConfig()
-                if (lastTime >= Math.floor(endTime / 1000 - endTime / 1000 % 60)) {
+                if (lastTime >= Math.floor(endTime / Math.pow(10, 6) - endTime / Math.pow(10, 6) % 60)) {
                     // 休市停止闪烁
                     return
                 }

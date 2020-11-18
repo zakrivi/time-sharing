@@ -101,7 +101,7 @@ export function formatData (options) {
 
     if (debug && result.length) {
         const times = result.map(item => {
-            const date = new Date(item.time * 1000)
+            const date = new Date(item.time)
             const M = date.getMonth() + 1
             const D = date.getDate()
             const h = date.getHours()

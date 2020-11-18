@@ -94,10 +94,10 @@ export class InitXAxis {
         ctx.fillStyle = 'rgb(76,82,94)'
         ctx.fillRect(rectX, 0, rectWidth, 15 * dpr)
         // 文字
-        const M = ('0' + (new Date(time * 1000).getMonth() + 1)).substr(-2)
-        const d = ('0' + new Date(time * 1000).getDate()).substr(-2)
-        const h = ('0' + new Date(time * 1000).getHours()).substr(-2)
-        const m = ('0' + new Date(time * 1000).getMinutes()).substr(-2)
+        const M = ('0' + (new Date(time).getMonth() + 1)).substr(-2)
+        const d = ('0' + new Date(time).getDate()).substr(-2)
+        const h = ('0' + new Date(time).getHours()).substr(-2)
+        const m = ('0' + new Date(time).getMinutes()).substr(-2)
         ctx.font = storage.getConfig().font.normal
         ctx.fillStyle = '#fff'
         ctx.textAlign = 'left'

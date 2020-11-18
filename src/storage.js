@@ -43,9 +43,9 @@ function getDefaultConfig () {
         computedHighPrice: null,
         computedLowPrice: null,
         digit: 2,
-        startTime: '',
-        endTime: '',
-        tradingLength: 0, // 交易时段计算出的数据总条数
+        startTime: Date.now() - 60 * 60 * 24 * 1000,
+        endTime: Date.now(),
+        tradingLength: 60 * 24, // 交易时段计算出的数据总条数
         size: {
             containerWidth: null, // 容器的宽度
             areaCtxWidth: null, // 图区上下文宽度

@@ -14,24 +14,16 @@
     <script src="../dist/time-sharing.min.js"></script>
     <script src="./data.js"></script>
     <script>
-        var lastData = {
-            highPrice: 1.95597,
-            lowPrice: 1.94717,
-            closePrice: 1.95070
-        }
         var myChart = new timeSharing.InitChart({
             el: '#my-chart',
         })
 
         myChart.applyConfig({
-            rawData: rawData, // 原始数据
-            startTime: 1604008800, // 开始时间
-            endTime: 1604091600, // 结束时间
-            highPrice: lastData.highPrice, //最高价
-            lowPrice: lastData.lowPrice, // 最低价
-            closePrice: lastData.closePrice, // 昨日收盘价
-            tradingLength: 60 * 24, // 交易时段的最大数据量
-            debug: true
+            rawData: rawData,
+            startTime: 1604008800000, 
+            endTime: 1604091600000, 
+            closePrice: 1.95070,
+            digit:5
         });
 
         // 监听事件
@@ -43,11 +35,11 @@
         })
 
         // H5
-        // ['touchend', 'touchstart', 'touchmove'].forEach(function (key) {
-        //     myChart.subscribe(key, function () {
-        //         console.log(key)
-        //     })
-        // })
+        ['touchend', 'touchstart', 'touchmove'].forEach(function (key) {
+            myChart.subscribe(key, function () {
+                console.log(key)
+            })
+        })
     </script>
 </body>
 
