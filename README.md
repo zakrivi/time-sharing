@@ -5,6 +5,10 @@ canvas分时图
 
 ## Basic Usage
 
+```html
+<div id="my-chart"></div>
+```
+
 In a browser:
 
 ```html
