@@ -1,13 +1,17 @@
 {
   "name": "time-sharing",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:watch": "node scripts/build.js -w",
     "build": "node scripts/build.js"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zakrivi/time-sharing.git"
+  },
+  "keywords": ["canvas"],
   "author": "zakrivi",
   "license": "ISC",
   "devDependencies": {

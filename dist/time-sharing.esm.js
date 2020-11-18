@@ -101,7 +101,7 @@ function formatData (options) {
 
     if (debug && result.length) {
         const times = result.map(item => {
-            const date = new Date(item.time * 1000);
+            const date = new Date(item.time);
             const M = date.getMonth() + 1;
             const D = date.getDate();
             const h = date.getHours();
@@ -241,9 +241,9 @@ function getDefaultConfig () {
         computedHighPrice: null,
         computedLowPrice: null,
         digit: 2,
-        startTime: '',
-        endTime: '',
-        tradingLength: 0, // 交易时段计算出的数据总条数
+        startTime: Date.now() - 60 * 60 * 24 * 1000,
+        endTime: Date.now(),
+        tradingLength: 60 * 24, // 交易时段计算出的数据总条数
         size: {
             containerWidth: null, // 容器的宽度
             areaCtxWidth: null, // 图区上下文宽度
@@ -382,7 +382,7 @@ class InitCorss {
 
         this._crossE = null;
         this.isShowCross = false;
-        this._drawRound();
+        // this._drawRound()
     }
 
     draw (e) {
@@ -484,7 +484,7 @@ class InitCorss {
             if (leng) {
                 const { x, y, time: lastTime } = storage.getConfig().kList[leng - 1];
                 const { endTime } = storage.getConfig();
-                if (lastTime >= Math.floor(endTime / 1000 - endTime / 1000 % 60)) {
+                if (lastTime >= Math.floor(endTime / Math.pow(10, 6) - endTime / Math.pow(10, 6) % 60)) {
                     // 休市停止闪烁
                     return
                 }
@@ -614,10 +614,10 @@ class InitXAxis {
         ctx.fillStyle = 'rgb(76,82,94)';
         ctx.fillRect(rectX, 0, rectWidth, 15 * dpr);
         // 文字
-        const M = ('0' + (new Date(time * 1000).getMonth() + 1)).substr(-2);
-        const d = ('0' + new Date(time * 1000).getDate()).substr(-2);
-        const h = ('0' + new Date(time * 1000).getHours()).substr(-2);
-        const m = ('0' + new Date(time * 1000).getMinutes()).substr(-2);
+        const M = ('0' + (new Date(time).getMonth() + 1)).substr(-2);
+        const d = ('0' + new Date(time).getDate()).substr(-2);
+        const h = ('0' + new Date(time).getHours()).substr(-2);
+        const m = ('0' + new Date(time).getMinutes()).substr(-2);
         ctx.font = storage.getConfig().font.normal;
         ctx.fillStyle = '#fff';
         ctx.textAlign = 'left';
