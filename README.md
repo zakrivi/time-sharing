@@ -5,6 +5,12 @@ canvas分时图
 
 ## Basic Usage
 
+页面添加图表容器
+
+```html
+<div id="my-chart"></div>
+```
+
 In a browser:
 
 ```html
