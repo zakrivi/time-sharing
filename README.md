@@ -34,6 +34,7 @@ var myChart = new InitChart({
 ```
 
 ## 效果图
+![demo.gif](./image/demo.gif)
 
 ## demo
 

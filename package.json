@@ -1,6 +1,6 @@
 {
   "name": "time-sharing",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/zakrivi/time-sharing.git"
   },
-  "keywords": ["canvas"],
+  "keywords": ["canvas","javascript","chart"],
   "author": "zakrivi",
   "license": "ISC",
   "devDependencies": {
